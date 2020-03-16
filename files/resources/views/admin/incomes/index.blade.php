@@ -23,7 +23,7 @@
                 @foreach($incomes as $income)
                     <tr>
                         <td>
-                            <img src="{{url("files/storage/app/{$income->icon}")}}"
+                            <img style="background-color: {{$income->color}}" src="{{url("files/storage/app/{$income->icon}")}}"
                                  class="img-fluid admin-img" width="100" height="100">
                         </td>
                         <td style="color: {{$income->color}}"> {{$income->name}}</td>
