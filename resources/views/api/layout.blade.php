@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Monefy Admin Panel</title>
+    <title>Система учета расходов Monefy</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -36,24 +36,21 @@
                 <div class="navbar-holder d-flex align-items-center justify-content-between">
                     <!-- Navbar Header-->
                     <div class="navbar-header">
-                        <a href="{{url('admin')}}" class="navbar-brand">
+                        <a href="{{url('api')}}" class="navbar-brand">
                             <div class="brand-text brand-big"><strong>Главная</strong></div>
-                            {{--<div class="brand-text brand-small"><strong>BD</strong></div>--}}
                         </a>
                     </div>
                     <!-- Navbar Menu -->
                     <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-
                         <!-- Search-->
                         <li class="nav-item d-flex align-items-center"><a id="search" href="#"><i
                                         class="icon-search"></i></a></li>
 
-                    <!-- Logout    -->
-                        {!! Form::open(['action'=>'Auth\LoginController@logout', 'method'=>'post', 'class'=>'nav-item', 'files'=>true]) !!}
-                        {!!Form::submit('Выйти', ['class'=> 'btn btn-primary'])!!}
-                        @csrf
-                        {!! Form::close() !!}
-
+                        <!-- Logout    -->
+                            {!! Form::open(['action'=>'Auth\LoginController@logout', 'method'=>'post', 'class'=>'nav-item', 'files'=>true]) !!}
+                            {!!Form::submit('Выйти', ['class'=> 'btn btn-primary'])!!}
+                                @csrf
+                            {!! Form::close() !!}
                     </ul>
                 </div>
             </div>
@@ -64,12 +61,11 @@
         <nav class="side-navbar">
             <!-- Sidebar Header-->
             <div class="sidebar-header d-flex align-items-center">
-
             </div>
             <!-- Sidebar Navidation Menus-->
             <ul class="list-unstyled">
-                <li class="active"><a href="{{url('admin/expenses')}}"><i class="material-icons">menu</i>Расходы</a></li>
-                <li class="active"><a href="{{url('admin/incomes')}}"><i class="material-icons">menu</i>Доходы</a></li>
+                <li class="active"><a href="{{url('api/expenses')}}"><i class="material-icons">menu</i>Расходы</a></li>
+                <li class="active"><a href="{{url('api/incomes')}}"><i class="material-icons">menu</i>Доходы</a></li>
             </ul>
         </nav>
         <div class="content-inner">
@@ -82,9 +78,8 @@
             </header>
             <div class="content-wrap">
                 @yield('content')
+            </div>
         </div>
     </div>
-    </div>
-</div>
 </body>
 </html>

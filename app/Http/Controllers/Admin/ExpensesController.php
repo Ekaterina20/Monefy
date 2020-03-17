@@ -42,7 +42,7 @@ class ExpensesController extends Controller
         $iconName = $icon->getClientOriginalName();
         $iconPath = $icon->storeAs('expenses', $iconName);
         $icon->move('images/expenses', $iconName);
-        
+
         Expense::create([
 
             'name' => $request['name'],
