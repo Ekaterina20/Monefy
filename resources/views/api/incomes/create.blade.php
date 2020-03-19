@@ -1,13 +1,13 @@
 @extends('api.layout')
 
-@section ('title', 'Добавьте новый расход')
+@section ('title', 'Добавьте новый доход')
 
 @section('content')
 
     <div class="card">
         <div class="card-body">
 
-            {!! Form::open(['url'=>'api/expenses/store', 'method'=>'put', 'class'=>'form-horizontal', 'files'=>true]) !!}
+            {!! Form::open(['url'=>'api/incomes/store', 'method'=>'put', 'class'=>'form-horizontal', 'files'=>true]) !!}
 
             <div class="form-group row">
                 {!!Form::label('name', 'Наименование', ['class'=>'col-sm-2 form-control-label'])!!}
@@ -18,10 +18,10 @@
             </div>
 
             <div class="form-group row">
-                {!!Form::label('expense_id', 'Категория расходов', ['class'=>'col-sm-2 form-control-label'])!!}
+                {!!Form::label('income_id', 'Категория доходов', ['class'=>'col-sm-2 form-control-label'])!!}
                 <div class="col-sm-10">
 
-                    {!!Form::select('expense_id',$expenses, null, ['class'=> 'form-control'])!!}
+                    {!!Form::select('income_id',$incomes, null, ['class'=> 'form-control'])!!}
 
                 </div>
             </div>

@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers\API;
 
-use App\ExpenseSite;
-use App\Expense;
+use App\IncomeSite;
+use App\Income;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 
 
-class ExpensesController extends Controller
+class IncomesController extends Controller
 {
-    protected $expenses;
+    protected $incomes;
 
     public function __construct()
     {
-        $this->expenses = Expense::pluck('name', 'id');
+        $this->incomes = Income::pluck('name', 'id');
     }
 
     public function index()
     {
-        $expense_sites = ExpenseSite::latest()->get(); /* забирает данные из БД таблицы*/
-        return view('api.expenses.index', compact('expense_sites'));
+        $income_sites = IncomeSite::latest()->get(); /* забирает данные из БД таблицы*/
+        return view('api.incomes.index', compact('income_sites'));
     }
 
     public function create()
     {
-        $expenses = $this->expenses;
-        return view('api.expenses.create', compact('expenses'));
+        $incomes = $this->incomes;
+        return view('api.incomes.create', compact('incomes'));
     }
 
     public function store(Request $request)
@@ -35,8 +35,8 @@ class ExpensesController extends Controller
         /*проверка валидация*/
         $this->validate($request, [
 
-            'name'=> 'unique:expense_sites', /*имя обязательно и уникально*/
-            'expense_id'=>'required',
+            'name'=> 'required|unique:income_sites', /*имя обязательно и уникально*/
+            'income_id'=>'required',
             'icon'=>'required',/*иконка обязательна*/
             'color'=>'required',
             'amount'=>'required|numeric',
@@ -49,63 +49,61 @@ class ExpensesController extends Controller
         $iconPath = $icon->storeAs('expenses', $iconName);
         $icon->move('images/expenses', $iconName);
 
-        ExpenseSite::create([
+        IncomeSite::create([
 
             'name' => $request['name'],
-            'expense_id' => $request['expense_id'],
+            'income_id' => $request['income_id'],
             'slug' => Str::slug($request['name']),
             'icon'=> $iconPath, /*путь к картинке сохраняем в БД*/
             'color' => $request ['color'],
             'amount' => $request ['amount'],
             'comment' => $request ['comment'],
         ]);
-        return redirect('api/expenses')->with('status', 'Расход добавлен успешно');
+        return redirect('api/incomes')->with('status', 'Доход добавлен успешно');
     }
 
-
-    public function edit (ExpenseSite $expense_site)
+    public function edit (IncomeSite $income_site)
     {
-        $expenses = $this -> expenses;
-        return view('api.expenses.edit', compact('expense_site', 'expenses'));
+        $incomes = $this -> incomes;
+        return view('api.incomes.edit', compact('income_site', 'incomes'));
     }
 
-    public function update (ExpenseSite $expense_site, Request $request)
+    public function update (IncomeSite $income_site, Request $request)
     {
         /*проверка валидация*/
 
         $this->validate($request, [
 
             'name'=> 'required', /*имя обязательно и уникально*/
-            'expense_id'=>'required',
+            'income_id'=>'required',
            /* 'icon'=>'required',/*иконка обязательна*/
             'amount'=>'required|numeric',
         ]);
 
         /*сохранение картинки в папку на сервере*/
 
-        /*$icon = $request->file('icon');
+     /*   $icon = $request->file('icon');
         $iconName = $icon->getClientOriginalName();
         $iconPath = $icon->storeAs('expenses', $iconName);
         $icon->move('images/expenses', $iconName);*/
 
-        $expense_site->update([
+        $income_site->update([
 
             'name'=>$request['name'],
-            'expense_id'=>$request['expense_id'],
+            'income_id'=>$request['income_id'],
             'slug'=>Str::slug($request['name']),
-            /*'icon'=> $iconPath, /*путь к картинке сохраняем в БД*/
-            /*'color'=>$request['color'],*/
+            /*'icon'=> $iconPath, путь к картинке сохраняем в БД
+            'color'=>$request['color'],*/
             'amount'=>$request['amount'],
             'comment' => $request['comment'],
 
         ]);
-        return redirect('api/expenses')->with('status','Расход успешно изменен');
+        return redirect('api/incomes')->with('status','Доход успешно изменен');
     }
 
-    public function delete (ExpenseSite $expense_site)
+    public function delete (IncomeSite $income_site)
     {
-        $expense_site->delete();
-        return redirect('api/expenses')->with('status','Расход удален успешно');
+        $income_site->delete();
+        return redirect('api/incomes')->with('status','Доход удален успешно');
     }
-
 }
