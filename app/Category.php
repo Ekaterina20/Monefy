@@ -4,17 +4,18 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Income extends Model
+class Category extends Model
 {
     protected $fillable = [
+
         'name',
-        'slug',
+        'flag',
         'icon',
         'color',
     ];
-    /*чтобы вернуть slug*/
-    public function getRouteKeyName()
+
+    public function finance()
     {
-        return 'slug';
+        return $this->hasMany('App\Finance');
     }
 }
