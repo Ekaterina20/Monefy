@@ -40,16 +40,10 @@ class PaymentsController extends Controller
             'user_id'=>'required',
             'amount'=>'required|numeric',
             'date'=>'required|date_format:Y-m-d',
+            'comment' => 'nullable',
         ]);
 
-        Finance::create([
-
-            'category_id' => $request['category_id'],
-            'user_id' => $request['user_id'],
-            'date' => $request ['date'],
-            'amount' => $request ['amount'],
-            'comment' => $request ['comment'],
-        ]);
+        Finance::create($request->all());
 
         $finance = Finance::
                             with(['category' => function ($query) {
@@ -60,38 +54,18 @@ class PaymentsController extends Controller
         return response()->json($finance,'200');
     }
 
-
-    /*public function update (Finance $finance, Request $request)
+    public function update (Finance $finance, Request $request)
     {
-        /*проверка валидация*/
+        $finance->update($request->all());
 
-        /*$this->validate($request, [
-
-            'category_id'=>'required',
-            'amount'=>'required|numeric',
-            'date'=>'required'|'date',
-        ]);
-
-        $finance->update([
-
-            'category_id' => $request['category_id'],
-            'user_id'=>$request ['user_id'],
-            'slug' => Str::slug($request['comment']),
-            'amount' => $request ['amount'],
-            'date'=> $request ['date'],
-            'comment' => $request ['comment'],
-
-        ]);
         return response()->json($finance, 200);
-
-
     }
 
     public function delete (Finance $finance)
     {
         $finance->delete();
-        return response()->json(null, 204);
-    } */
+        return response()->json(null, 200);
+    }
 }
 
 

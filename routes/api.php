@@ -7,9 +7,11 @@ Route::namespace('API')->group(function() {
     Route::group(['prefix' => 'payments'], function (){
         Route::get('/', 'PaymentsController@index');
         Route::post('/payment', 'PaymentsController@store');
+        Route::put('/payment/{finance}', 'PaymentsController@update');
+        Route::delete('/payment/{finance}', 'PaymentsController@delete');
 
-    /*Route::PUT('/payment/{finance}', 'PaymentsController@update');
-    Route::DELETE('/payment/{finance}', 'PaymentsController@delete');
+    /*
+
 
     });
 
