@@ -42,9 +42,9 @@
                         <div class="content">
                             {!! Form::open(['route'=>'login', 'id'=>'login-form']) !!}
                             <div class="form-group">
-                                {!! Form::text('email', null, ['class'=>'input-material', 'placeholder'=>'email']) !!}
-                                @if ($errors->has('email'))
-                                    <p>{{$errors->first('email')}}</p>
+                                {!! Form::text('phone_number', null, ['class'=>'input-material', 'placeholder'=>'phone_number']) !!}
+                                @if ($errors->has('phone_number'))
+                                    <p>{{$errors->first('phone_number')}}</p>
                                 @endif
                             </div>
                             <div class="form-group">

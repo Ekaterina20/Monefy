@@ -14,6 +14,13 @@ class Category extends Model
         'color',
     ];
 
+    protected $hidden = [
+
+        'created_at',
+        'updated_at',
+        'flag',
+    ];
+
     public function finance()
     {
         return $this->hasMany('App\Finance');

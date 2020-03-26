@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Finance;
 use App\Http\Controllers\Controller;
 
-class PaymentsController extends Controller
+class FinancesController extends Controller
 {
 
     public function index()
@@ -21,13 +21,10 @@ class PaymentsController extends Controller
         } else {*/
 
             $finance = Finance::select('id', 'amount', 'comment', 'date', 'category_id')
-                ->with(['category' => function ($query) {
-                    $query->select('id', 'name', 'icon');}])
-                ->orderByDesc('date')
-                ->paginate();
-        /*}*/
+                ->with('category')
+                ->orderByDesc('date');
 
-        return response()->json($finance,'200');
+        return response()->json($finance->paginate(),'200');
     }
 
     public function store(Request $request)
@@ -45,11 +42,7 @@ class PaymentsController extends Controller
 
         Finance::create($request->all());
 
-        $finance = Finance::
-                            with(['category' => function ($query) {
-                                    $query->select('id', 'name', 'icon');}])
-                            ->get()
-                            ->last();
+        $finance = Finance::with('category')->get()->last();
 
         return response()->json($finance,'200');
     }
@@ -64,7 +57,7 @@ class PaymentsController extends Controller
     public function delete (Finance $finance)
     {
         $finance->delete();
-        return response()->json(null, 200);
+        return response()->json(['message'=>'запись удалена'],  200);
     }
 }
 

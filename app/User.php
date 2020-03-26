@@ -13,11 +13,11 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email',  'phone_number', 'is_admin', 'balance',
+        'name', 'email',  'phone_number',  'balance','password','api_token',
     ];
 
     protected $hidden = [
-        'password', 'remember_token', 'api_token'
+        'remember_token', 'is_admin', 'created_at', 'updated_at'
     ];
 
     protected $casts = [
@@ -31,6 +31,14 @@ class User extends Authenticatable
 
     public function Finance () {
         return $this->hasMany(Finance::class);
+    }
+
+    public function generateToken()
+    {
+        $this->api_token = Str::random(60);
+        $this->save();
+
+        return $this->api_token;
     }
 
     /*public function getBalance() {

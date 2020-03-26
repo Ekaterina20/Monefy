@@ -74,13 +74,6 @@ class RegisterController extends Controller
             'balance' => 0,
         ]);
     }
-
-    protected function registered(Request $request, $user)
-    {
-        $user->generateToken();
-
-        return response()->json(['data' => $user->toArray()], 201);
-    }
 }
 
 /*
