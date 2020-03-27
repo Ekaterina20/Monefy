@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use Illuminate\Http\Request;
 use App\Finance;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class FinancesController extends Controller
 {
@@ -47,15 +48,24 @@ class FinancesController extends Controller
         return response()->json($finance,'200');
     }
 
-    public function update (Finance $finance, Request $request)
+    public function update ( Request $request, $id)
     {
+
+        /*если результат запроса пустой, выйдет исключение 404*/
+        $finance = Finance::where('user_id',Auth::id())
+            ->findOrFail($id);
+
         $finance->update($request->all());
 
         return response()->json($finance, 200);
     }
 
-    public function delete (Finance $finance)
+    public function delete ($id)
     {
+        /*если результат запроса пустой, выйдет исключение 404*/
+        $finance = Finance::where('user_id',Auth::id())
+            ->findOrFail($id);
+
         $finance->delete();
         return response()->json(['message'=>'запись удалена'],  200);
     }

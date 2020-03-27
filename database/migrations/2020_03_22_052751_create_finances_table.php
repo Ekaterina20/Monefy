@@ -1,5 +1,6 @@
 <?php
 
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -17,7 +18,7 @@ class CreateFinancesTable extends Migration
             $table->bigIncrements('id');
             $table->float('amount');
             $table->string('comment')->nullable();
-            $table->date('date');
+            $table->date('date')->default(Carbon::now());
             $table->timestamps();
 
             //создание поля для связывания с таблицей categories, users

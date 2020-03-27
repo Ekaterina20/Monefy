@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use App\User;
@@ -74,5 +75,4 @@ class LoginController extends Controller
 
         return $this->sendFailedLoginResponse($request);
     }
-
 }

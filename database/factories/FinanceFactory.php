@@ -8,7 +8,7 @@ use App\Finance;
 
 $factory->define(\App\Finance::class, function (Faker $faker) {
     return [
-        'amount' => $faker->numberBetween(1,100000),
+        'amount' => $faker->numberBetween(1,20000),
         'comment' => $faker->text(),
         'date' => $faker->date(),
         'category_id'=>$faker->numberBetween(1,4),
