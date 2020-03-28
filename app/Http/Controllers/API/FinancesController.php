@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Category;
 use Illuminate\Http\Request;
 use App\Finance;
 use App\Http\Controllers\Controller;
@@ -41,11 +42,34 @@ class FinancesController extends Controller
             'comment' => 'nullable',
         ]);
 
+        /*создание фин операции*/
         Finance::create($request->all());
 
+        /*вывод операции с категорией*/
         $finance = Finance::with('category')->get()->last();
 
-        return response()->json($finance,'200');
+        /*поиск созданной операции*/
+        $expense = Category::where('id', $finance->category_id)->first();
+
+        /*проверка флага категории. если 0, то расход. 1-доход*/
+        if ($expense->flag == 0) {
+            $finance->amount = $finance->amount*(-1);
+        }
+        else {
+            $finance->amount;
+        }
+
+        $finance->save();
+
+        /*расчет баланса авторизованного пользователя после создания фин. операции*/
+        $balance = Finance::where('user_id', Auth::id())->sum('amount');
+
+        /*сохранение (обновление) баланса для юзера*/
+        $user =  Auth::user();
+        $user->balance = $balance;
+        $user->save();
+
+        return response()->json([$finance, 'current_balance' => $balance],'200');
     }
 
     public function update ( Request $request, $id)
@@ -67,6 +91,15 @@ class FinancesController extends Controller
             ->findOrFail($id);
 
         $finance->delete();
+
+        /*расчет баланса авторизованного пользователя после создания фин. операции*/
+        $balance = Finance::where('user_id', Auth::id())->sum('amount');
+
+        /*сохранение (обновление) баланса для юзера*/
+        $user =  Auth::user();
+        $user->balance = $balance;
+        $user->save();
+        
         return response()->json(['message'=>'запись удалена'],  200);
     }
 }

@@ -12,13 +12,14 @@ class Category extends Model
         'flag',
         'icon',
         'color',
+        'flag',
     ];
 
     protected $hidden = [
 
         'created_at',
         'updated_at',
-        'flag',
+
     ];
 
     public function finance()

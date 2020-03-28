@@ -13,7 +13,9 @@ class User extends Authenticatable
     use Notifiable;
 
     protected $fillable = [
-        'name', 'email',  'phone_number',  'balance','password','api_token',
+        'name', 'email',  'phone_number',
+        'balance',
+        'password','api_token',
     ];
 
     protected $hidden = [
@@ -40,23 +42,4 @@ class User extends Authenticatable
 
         return $this->api_token;
     }
-
-    /*public function getBalance() {
-        return $this->balance;
-    }
-
-    public function update_balance_user($flag, $balance) {
-        if ($flag == 'income') {
-            $this->balance = $this->balance+$balance;
-            $this->save();
-            return $this->balance;
-        }
-
-        if ($flag == 'expenses') {
-            $this->balance = $this->balance-$balance;
-            $this->save();
-            return $this->balance;
-        }
-
-    }*/
 }
