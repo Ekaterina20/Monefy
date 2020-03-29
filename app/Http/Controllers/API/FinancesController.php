@@ -11,22 +11,30 @@ use Illuminate\Support\Facades\Auth;
 class FinancesController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-       /* if (request()->has('date')){
-            $finance = Finance::select('id', 'amount', 'comment','date','category_id')
-                ->with(['category' => function($query){
-                    $query->select('id', 'name', 'icon');}])
-                ->where('date', request('date'))
-                ->orderByDesc('date')
-                ->paginate();
-        } else {*/
+       $financeQuery = Finance::query()
+                        ->with('category')
+                        ->where('user_id', Auth::id())
+                        ->orderByDesc('date');
 
-            $finance = Finance::select('id', 'amount', 'comment', 'date', 'category_id')
-                ->with('category')
-                ->orderByDesc('date');
+    /*Если вы хотите определить, присутствует ли значение в запросе и
+    не является ли оно пустым, вы можете использовать filled метод*/
+       if ($request->filled('date_from')){
+           $financeQuery->where('date', '>=', $request->date_from);
+       }
 
-        return response()->json($finance->paginate(),'200');
+       if ($request->filled('date_to')){
+            $financeQuery->where('date', '<=', $request->date_to);
+       }
+
+       if ($request->filled('categories')) {
+            $financeQuery->whereIn('category_id', $request->categories);
+       }
+
+       $finance = $financeQuery->paginate();
+
+       return response()->json($finance,'200');
     }
 
     public function store(Request $request)
@@ -74,7 +82,6 @@ class FinancesController extends Controller
 
     public function update ( Request $request, $id)
     {
-
         /*если результат запроса пустой, выйдет исключение 404*/
         $finance = Finance::where('user_id',Auth::id())
             ->findOrFail($id);
@@ -92,14 +99,14 @@ class FinancesController extends Controller
 
         $finance->delete();
 
-        /*расчет баланса авторизованного пользователя после создания фин. операции*/
+        /*расчет баланса авторизованного пользователя после удаления фин. операции*/
         $balance = Finance::where('user_id', Auth::id())->sum('amount');
 
         /*сохранение (обновление) баланса для юзера*/
         $user =  Auth::user();
         $user->balance = $balance;
         $user->save();
-        
+
         return response()->json(['message'=>'запись удалена'],  200);
     }
 }
