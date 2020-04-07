@@ -4,12 +4,49 @@ namespace App\Http\Controllers\API;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 
-class RegisterController extends Controller
+class AuthController extends Controller
 {
+    use AuthenticatesUsers;
+
+    protected $redirectTo = '/home';
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+    }
+
+    public function login(Request $request)
+    {
+        /*проверка валидация*/
+
+        $this->validate($request, [
+
+            'password' => ['required', 'string', 'min:8'],
+            'phone_number'=>['required', 'string'],
+            'email'=> 'nullable',
+        ]);
+
+        if ($this->attemptLogin($request)) {
+            $user = $this->guard()->user();
+            $user->generateToken();
+
+            return response()->json([
+                'data' => $user->toArray(),
+            ]);
+        }
+
+        return $this->sendFailedLoginResponse($request);
+    }
 
     protected function register(Request $request)
     {

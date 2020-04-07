@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class FinancesController extends Controller
 {
 
-    public function index(Request $request)
+    public function list (Request $request)
     {
        $financeQuery = Finance::query()
                         ->with('category')
@@ -56,28 +56,23 @@ class FinancesController extends Controller
         /*вывод операции с категорией*/
         $finance = Finance::with('category')->get()->last();
 
-        /*поиск созданной операции*/
+        /*поиск созданной операции, отсюда нужен флаг категории*/
         $expense = Category::where('id', $finance->category_id)->first();
 
         /*проверка флага категории. если 0, то расход. 1-доход*/
         if ($expense->flag == 0) {
             $finance->amount = $finance->amount*(-1);
         }
-        else {
-            $finance->amount;
-        }
+        else {$finance->amount;}
 
         $finance->save();
 
-        /*расчет баланса авторизованного пользователя после создания фин. операции*/
-        $balance = Finance::where('user_id', Auth::id())->sum('amount');
-
         /*сохранение (обновление) баланса для юзера*/
         $user =  Auth::user();
-        $user->balance = $balance;
+        $user->balance += $finance->amount;
         $user->save();
 
-        return response()->json([$finance, 'current_balance' => $balance],'200');
+        return response()->json([$finance, 'current_balance' =>  $user->balance],'200');
     }
 
     public function update ( Request $request, $id)
@@ -88,7 +83,26 @@ class FinancesController extends Controller
 
         $finance->update($request->all());
 
-        return response()->json($finance, 200);
+        /*поиск созданной операции*/
+        $expense = Category::where('id', $finance->category_id)->first();
+
+        /*проверка флага категории. если 0, то расход. 1-доход*/
+        if ($expense->flag == 0) {
+            $finance->amount = $finance->amount*(-1);
+        }
+        else {$finance->amount;}
+
+        $finance->save();
+
+        /*расчет баланса авторизованного пользователя после редактир. фин. операции*/
+        $balance = Finance::where('user_id', Auth::id())->sum('amount');
+
+        /*сохранение (обновление) баланса для юзера*/
+        $user =  Auth::user();
+        $user->balance = $balance;
+        $user->save();
+
+        return response()->json([$finance, 'current_balance' => $user->balance], 200);
     }
 
     public function delete ($id)
@@ -99,15 +113,14 @@ class FinancesController extends Controller
 
         $finance->delete();
 
-        /*расчет баланса авторизованного пользователя после удаления фин. операции*/
-        $balance = Finance::where('user_id', Auth::id())->sum('amount');
-
         /*сохранение (обновление) баланса для юзера*/
         $user =  Auth::user();
-        $user->balance = $balance;
+        $user->balance -= $finance->amount;
         $user->save();
 
-        return response()->json(['message'=>'запись удалена'],  200);
+        return response()
+            ->json(['current_balance' => $user->balance, 'message'=>'запись удалена'],
+                200);
     }
 }
 
