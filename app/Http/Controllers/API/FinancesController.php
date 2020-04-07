@@ -18,7 +18,7 @@ class FinancesController extends Controller
                         ->where('user_id', Auth::id())
                         ->orderByDesc('date');
 
-    /*Если вы хотите определить, присутствует ли значение в запросе и
+    /*Фильтры. Если вы хотите определить, присутствует ли значение в запросе и
     не является ли оно пустым, вы можете использовать filled метод*/
        if ($request->filled('date_from')){
            $financeQuery->where('date', '>=', $request->date_from);
@@ -36,6 +36,7 @@ class FinancesController extends Controller
 
        return response()->json($finance,'200');
     }
+
 
     public function store(Request $request)
     {
@@ -75,11 +76,16 @@ class FinancesController extends Controller
         return response()->json([$finance, 'current_balance' =>  $user->balance],'200');
     }
 
+
     public function update ( Request $request, $id)
     {
-        /*если результат запроса пустой, выйдет исключение 404*/
-        $finance = Finance::where('user_id',Auth::id())
-            ->findOrFail($id);
+        /*если результат запроса пустой, выйдет исключение 403*/
+        $finance = Finance::where('user_id',Auth::id())->find($id);
+
+        if ($finance == null) {
+            return response()
+                ->json ('Forbidden. Record belongs to another user', 403);
+        }
 
         $finance->update($request->all());
 
@@ -105,11 +111,17 @@ class FinancesController extends Controller
         return response()->json([$finance, 'current_balance' => $user->balance], 200);
     }
 
+
     public function delete ($id)
     {
-        /*если результат запроса пустой, выйдет исключение 404*/
-        $finance = Finance::where('user_id',Auth::id())
-            ->findOrFail($id);
+        /*если результат запроса пустой, выйдет исключение 403*/
+
+        $finance = Finance::where('user_id',Auth::id())->find($id);
+
+        if ($finance == null) {
+            return response()
+                ->json ('Forbidden. Record belongs to another user', 403);
+        }
 
         $finance->delete();
 
