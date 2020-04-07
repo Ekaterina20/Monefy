@@ -64,8 +64,8 @@ class FinancesController extends Controller
         if ($expense->flag == 0) {
             $finance->amount = $finance->amount*(-1);
         }
-        else {$finance->amount;}
 
+        $finance->amount;
         $finance->save();
 
         /*сохранение (обновление) баланса для юзера*/
@@ -96,8 +96,8 @@ class FinancesController extends Controller
         if ($expense->flag == 0) {
             $finance->amount = $finance->amount*(-1);
         }
-        else {$finance->amount;}
 
+        $finance->amount;
         $finance->save();
 
         /*расчет баланса авторизованного пользователя после редактир. фин. операции*/
