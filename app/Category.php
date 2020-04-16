@@ -12,7 +12,6 @@ class Category extends Model
         'flag',
         'icon',
         'color',
-        'flag',
     ];
 
     protected $hidden = [

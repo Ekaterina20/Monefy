@@ -15,11 +15,13 @@ class User extends Authenticatable
     protected $fillable = [
         'name', 'email',  'phone_number',
         'balance',
-        'password','api_token',
+        'password',
+        'api_token',
+        'is_admin',
     ];
 
     protected $hidden = [
-        'remember_token', 'is_admin', 'created_at', 'updated_at'
+        'remember_token', 'created_at', 'updated_at'
     ];
 
     protected $casts = [

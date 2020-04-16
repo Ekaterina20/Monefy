@@ -67,6 +67,7 @@ class AuthController extends Controller
             'phone_number' => $request['phone_number'],
             'api_token' => Str::random(60),
             'balance' => 0,
+            'is_admin' => 0,
         ]);
 
         $user = User::select('api_token','id', 'name', 'phone_number', 'balance')->get()->last();

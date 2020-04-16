@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -30,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/login';
 
     /**
      * Create a new controller instance.
@@ -51,9 +50,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['nullable', 'string', 'max:255'],
+            'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'phone_number'=>['required', 'string', 'unique:users'],
+            'phone_number'=>['required', 'string', 'unique:users']
         ]);
     }
 
@@ -72,12 +72,8 @@ class RegisterController extends Controller
             'phone_number'=>$data['phone_number'],
             'api_token' => Str::random(60),
             'balance' => 0,
+            'is_admin' => 1,
         ]);
     }
-}
 
-/*
-return response()->json([
-    'api_token' => $user->api_token,
-    'user' => $user
-],200);*/
+}

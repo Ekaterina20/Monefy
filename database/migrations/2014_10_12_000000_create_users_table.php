@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('phone_number')->unique();
             $table->float('balance');
-            $table->boolean('is_admin')->default(0);
+            $table->boolean('is_admin');
             $table->rememberToken();
             $table->timestamps();
         });

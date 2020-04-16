@@ -79,7 +79,7 @@ class FinancesController extends Controller
 
     public function update ( Request $request, $id)
     {
-        /*если результат запроса пустой, выйдет исключение 403*/
+        /*если юзер изменяет чужую операцию, выйдет исключение 403*/
         $finance = Finance::where('user_id',Auth::id())->find($id);
 
         if ($finance == null) {
@@ -114,7 +114,7 @@ class FinancesController extends Controller
 
     public function delete ($id)
     {
-        /*если результат запроса пустой, выйдет исключение 403*/
+        /*если юзер изменяет чужую операцию, выйдет исключение 403*/
 
         $finance = Finance::where('user_id',Auth::id())->find($id);
 
