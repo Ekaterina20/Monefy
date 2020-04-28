@@ -41,8 +41,10 @@
                     <div class="form d-flex align-items-center">
                         <div class="content">
                             {!! Form::open(['route'=>'login', 'id'=>'login-form']) !!}
+
                             <div class="form-group">
-                                {!! Form::text('phone_number', null, ['class'=>'input-material', 'placeholder'=>'phone_number']) !!}
+                                {!!Form::label('phone_number', 'Номер телефона', ['class' => 'input-material'])!!}
+                                {!! Form::text('phone_number', null, ['class'=>'input-material',  'id'=>'phone']) !!}
                                 @if ($errors->has('phone_number'))
                                     <p>{{$errors->first('phone_number')}}</p>
                                 @endif
@@ -56,18 +58,26 @@
                             {!! Form::submit('Войти', ['class'=>'btn btn-primary']) !!}
                             {!! Form::close() !!}
                             {{-- <a href="#" class="forgot-pass">Forgot Password?</a><br>--}}
-                            <small>Do not have an account?</small>
+                            <small>Еще нет аккаунта?</small>
 
-                            <a href="{{url('/register')}}" class="signup">Signup</a>
+                            <a href="{{url('/register')}}" class="signup">Регистрация</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    {{--<div class="copyrights text-center">
-        <p>Design by <a href="https://bootstrapious.com/admin-templates" class="external">Bootstrapious</a></p>
-    </div>--}}
 </div>
+
+<!--Подключаем библиотеку jquery-->
+<script src="{{asset('js/jquery-3.5.0.min.js')}}"></script>
+
+<!--Подключаем плагин jquery для маски ввода-->
+<script src="{{asset('js/jquery.maskedinput.min.js')}}"></script>
+<script>
+    $(document).ready(function(){
+        $("#phone").mask("0(999) 99-99-99");
+    })
+</script>
 </body>
 </html>

@@ -26,8 +26,5 @@ Route::namespace('Admin')->group(function() {
 
 Auth::routes();
 
-Route::group(['middleware'=>'admin'], function () {
-    Route::get('/home', 'HomeController@index')->name('admin');
-});
 /*Route::post('logout', 'Auth\LoginController@logout')->name('logout');*/
 Route::get('/warning', 'WarningController@index');

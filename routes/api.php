@@ -8,8 +8,8 @@ Route::namespace('API')->group(function() {
     Route::group(['prefix' => 'payments', 'middleware' => 'auth:api'], function (){
         Route::get('/', 'FinancesController@list');
         Route::post('/payment', 'FinancesController@store');
-        Route::put('/payment/{finance}', 'FinancesController@update');
-        Route::delete('/payment/{finance}', 'FinancesController@delete');
+        Route::put('/payment/{id}', 'FinancesController@update');
+        Route::delete('/payment/{id}', 'FinancesController@delete');
     });
 
         Route::group(['prefix' => 'auth'], function (){

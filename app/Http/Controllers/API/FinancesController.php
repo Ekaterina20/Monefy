@@ -45,14 +45,22 @@ class FinancesController extends Controller
         $this->validate($request, [
 
             'category_id'=>'required',
-            'user_id'=>'required',
             'amount'=>'required|numeric',
             'date'=>'required|date_format:Y-m-d',
             'comment' => 'nullable',
         ]);
 
         /*создание фин операции*/
-        Finance::create($request->all());
+
+        Finance::create([
+
+            'category_id'=>$request['category_id'],
+            'user_id' =>$request->user()->id,
+            'amount'=> $request['amount'],
+            'date'=> $request['date'],
+            'comment'=>$request['comment'],
+
+        ]);
 
         /*вывод операции с категорией*/
         $finance = Finance::with('category')->get()->last();
@@ -79,6 +87,13 @@ class FinancesController extends Controller
 
     public function update ( Request $request, $id)
     {
+        /*проверка валидация*/
+
+        $this->validate($request, [
+            'amount'=>'numeric',
+            'date'=>'date_format:Y-m-d',
+        ]);
+
         /*если юзер изменяет чужую операцию, выйдет исключение 403*/
         $finance = Finance::where('user_id',Auth::id())->find($id);
 

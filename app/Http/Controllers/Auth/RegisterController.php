@@ -75,5 +75,4 @@ class RegisterController extends Controller
             'is_admin' => 1,
         ]);
     }
-
 }
